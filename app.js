@@ -2,14 +2,15 @@ let tasks = [
   { text: "AAA", id: "123", done: false },
   { text: "BBB", id: "234", done: false },
 ];
-const ALERT_TIMEOUT = 3000;
+const ALERT_TIMEOUT = 4000;
 const DANGER = "danger";
 const SUCCESS = "success";
 let isEditing = false;
+let editingID = "";
 const MESSAGES = {
   ITEM_ADDED: "Item added!",
   ITEM_REMOVED: "Item removed!",
-  ITEM_CHANGED: "Item changed!",
+  ITEM_UPDATED: "Item updated!",
   EMPTY_NEW: "Nothing to add to tasks!",
   EMPTY_UPDATE: "Nothing to update!",
   NEW_TASK: "New task added!",
@@ -42,11 +43,12 @@ function showAlert(text, type) {
 function resetState() {
   isEditing = false;
   setInput("");
+  editingID = "";
   renderSubmitBtn();
   renderTaskList();
 }
 function taskToHTML(t) {
-  return `<article class="task" id=${t.id}>
+  return `<article class="task" id=${t.id} draggable="true">
     <span class=".task-text">${t.text}</span>
     <span class="btn-group">
       <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor"
@@ -90,11 +92,11 @@ function handleSubmit(e) {
     tasks.unshift(newTask);
     showAlert(MESSAGES.NEW_TASK, SUCCESS);
   } else if (inputValue && isEditing) {
-    console.log("Task updated!");
+    setTaskText(editingID, inputValue);
+    showAlert(MESSAGES.ITEM_UPDATED, SUCCESS);
   }
-  renderTaskList();
+
   resetState();
-  renderSubmitBtn();
 }
 
 function removeAllItems() {
@@ -108,9 +110,16 @@ function grabAssociatedText(btn) {
 function grabTaskItem(btn) {
   return btn.parentElement.parentElement;
 }
+function grabTaskTextElem(btn) {
+  return btn.parentElement.previousElementSibling;
+}
+function setTaskText(idx, txt) {
+  tasks.find((t) => t.id === idx).text = txt;
+}
 function editOn(e) {
   isEditing = true;
   const text = grabAssociatedText(e.currentTarget);
+  editingID = grabTaskItem(e.currentTarget).id;
   setInput(text);
   renderSubmitBtn();
 }
