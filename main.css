@@ -1,0 +1,96 @@
+*,
+::before,
+::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  display: grid;
+  place-content: center;
+  min-height: 100vh;
+}
+.container {
+  min-width: 400px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: yellow;
+  text-align: center;
+}
+.alert {
+  padding: 1rem;
+  text-align: center;
+  border-radius: 0.3em;
+}
+.danger {
+  background-color: rgb(255, 215, 215);
+  color: rgb(172, 50, 50);
+}
+.success {
+  background-color: rgb(174, 253, 174);
+  color: green;
+}
+.title {
+  margin: 1rem 0;
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+.todo-form {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  width: 100%;
+  height: 2rem;
+  margin: 1rem auto;
+}
+#todo {
+  border-radius: 0.3em 0 0 0.3em;
+  border: 1px solid #777;
+  padding: 0 0.6rem;
+}
+.submit-btn {
+  background-color: rgb(162, 182, 255);
+  border: none;
+  border-radius: 0 0.3em 0.3em 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: bold;
+}
+.task-container {
+  margin: 1rem 0;
+}
+.task {
+  padding: 1rem;
+  margin: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fafafa;
+}
+.btn-group {
+  margin-left: auto;
+}
+.bi-pencil {
+  color: purple;
+  font-size: 1.2em;
+  margin-right: 0.3em;
+}
+.bi-trash {
+  font-size: 1.2em;
+  color: red;
+}
+.clear-btn {
+  width: fit-content;
+  margin: 1rem auto;
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 0.3em;
+  background-color: rgb(203, 94, 94);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: bold;
+}
+.show {
+  display: inline-block;
+}
