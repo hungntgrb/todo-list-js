@@ -1,6 +1,6 @@
 let tasks = [
-  { text: "AAA", id: "123", done: false },
-  { text: "BBB", id: "234", done: false },
+  { text: "Viec 1", id: "123", done: false },
+  { text: "Viec 2", id: "234", done: false },
 ];
 const ALERT_TIMEOUT = 4000;
 const DANGER = "danger";
