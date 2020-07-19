@@ -22,6 +22,7 @@ body {
   background-color: yellow;
   text-align: center;
   border-radius: 0.3em;
+  box-shadow: 0 0 1rem -1px black;
 }
 .alert {
   padding: 1rem;
@@ -56,7 +57,7 @@ body {
   padding: 0 0.6rem;
 }
 .submit-btn {
-  background-color: rgb(162, 182, 255);
+  background-color: #a2b6ff;
   border: none;
   border-radius: 0 0.3em 0.3em 0;
   text-transform: uppercase;

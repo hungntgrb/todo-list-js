@@ -1,5 +1,8 @@
-let tasks = [{ text: "Demo Item", done: false, id: "123" }];
-const ALERT_TIMEOUT = 4000;
+let tasks = [
+  { text: "AAA", id: "123", done: false },
+  { text: "BBB", id: "234", done: false },
+];
+const ALERT_TIMEOUT = 3000;
 const DANGER = "danger";
 const SUCCESS = "success";
 let isEditing = false;
@@ -16,11 +19,15 @@ const form = document.querySelector(".todo-form");
 const input = document.getElementById("todo");
 const list = document.querySelector(".task-container");
 const clearBtn = document.querySelector(".clear-btn");
+const submitBtn = document.querySelector(".submit-btn");
 
 function Task(text, id = "9999", done = false) {
   this.text = text;
   this.done = done;
   this.id = id;
+}
+function setInput(val) {
+  input.value = val;
 }
 
 function showAlert(text, type) {
@@ -33,6 +40,7 @@ function showAlert(text, type) {
 }
 function resetState() {
   isEditing = false;
+  setInput("");
 }
 function taskToHTML(t) {
   return `<article class="task">
@@ -62,6 +70,8 @@ function renderTaskList() {
   list.innerHTML = tasks.map(taskToHTML).join("");
   if (tasks.length > 0) {
     clearBtn.classList.add("show");
+  } else {
+    clearBtn.className = "clear-btn";
   }
 }
 function handleSubmit(e) {
@@ -76,11 +86,55 @@ function handleSubmit(e) {
     const newTask = new Task(inputValue, timeStamp());
     tasks.unshift(newTask);
     showAlert(MESSAGES.NEW_TASK, SUCCESS);
+  } else if (inputValue && isEditing) {
+    console.log("Task updated!");
   }
   renderTaskList();
   resetState();
+  renderSubmitBtn();
+}
+
+function removeAllItems() {
+  tasks = [];
+  renderTaskList();
+}
+function grabAssociatedText(btn) {
+  return btn.parentElement.previousElementSibling.textContent;
+}
+function editOn(e) {
+  isEditing = true;
+  const text = grabAssociatedText(e.currentTarget);
+  setInput(text);
+  renderSubmitBtn();
+}
+function removeItem() {
+  console.log("Item removed!");
+}
+
+function renderSubmitBtn() {
+  if (isEditing) {
+    submitBtn.style.backgroundColor = "rgb(255, 210, 210)";
+    submitBtn.textContent = "save";
+  } else {
+    submitBtn.style.backgroundColor = "#a2b6ff";
+    submitBtn.textContent = "submit";
+  }
 }
 
 renderTaskList();
 
 form.addEventListener("submit", handleSubmit);
+clearBtn.addEventListener("click", removeAllItems);
+// ---
+function listenToModify() {
+  const taskElems = document.querySelectorAll(".task");
+  taskElems.forEach((elem) => {
+    const editBtn = elem.querySelector(".bi-pencil");
+    const deleteBtn = elem.querySelector(".bi-trash");
+
+    editBtn.addEventListener("click", editOn);
+    deleteBtn.addEventListener("click", removeItem);
+  });
+}
+
+setInterval(listenToModify, 100);
