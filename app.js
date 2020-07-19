@@ -13,6 +13,7 @@ const MESSAGES = {
   EMPTY_NEW: "Nothing to add to tasks!",
   EMPTY_UPDATE: "Nothing to update!",
   NEW_TASK: "New task added!",
+  ALL_CLEARED: "Removed all items!",
 };
 const alert = document.querySelector(".alert");
 const form = document.querySelector(".todo-form");
@@ -41,9 +42,11 @@ function showAlert(text, type) {
 function resetState() {
   isEditing = false;
   setInput("");
+  renderSubmitBtn();
+  renderTaskList();
 }
 function taskToHTML(t) {
-  return `<article class="task">
+  return `<article class="task" id=${t.id}>
     <span class=".task-text">${t.text}</span>
     <span class="btn-group">
       <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor"
@@ -96,10 +99,14 @@ function handleSubmit(e) {
 
 function removeAllItems() {
   tasks = [];
+  showAlert(MESSAGES.ALL_CLEARED, SUCCESS);
   renderTaskList();
 }
 function grabAssociatedText(btn) {
   return btn.parentElement.previousElementSibling.textContent;
+}
+function grabTaskItem(btn) {
+  return btn.parentElement.parentElement;
 }
 function editOn(e) {
   isEditing = true;
@@ -107,16 +114,20 @@ function editOn(e) {
   setInput(text);
   renderSubmitBtn();
 }
-function removeItem() {
-  console.log("Item removed!");
+function removeItem(e) {
+  const elem = grabTaskItem(e.currentTarget);
+  tasks = tasks.filter((t) => t.id !== elem.id);
+  showAlert(MESSAGES.ITEM_REMOVED, SUCCESS);
+  renderTaskList();
+  resetState();
 }
 
 function renderSubmitBtn() {
   if (isEditing) {
-    submitBtn.style.backgroundColor = "rgb(255, 210, 210)";
+    submitBtn.classList.add("edit");
     submitBtn.textContent = "save";
   } else {
-    submitBtn.style.backgroundColor = "#a2b6ff";
+    submitBtn.classList.remove("edit");
     submitBtn.textContent = "submit";
   }
 }
