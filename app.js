@@ -1,14 +1,40 @@
-let tasks = [
-  { text: "Item 1", done: false, id: "123" },
-  { text: "Item 2", done: false, id: "234" },
-  { text: "Item 3", done: false, id: "345" },
-];
+let tasks = [{ text: "Demo Item", done: false, id: "123" }];
+const ALERT_TIMEOUT = 4000;
+const DANGER = "danger";
+const SUCCESS = "success";
+let isEditing = false;
+const MESSAGES = {
+  ITEM_ADDED: "Item added!",
+  ITEM_REMOVED: "Item removed!",
+  ITEM_CHANGED: "Item changed!",
+  EMPTY_NEW: "Nothing to add to tasks!",
+  EMPTY_UPDATE: "Nothing to update!",
+  NEW_TASK: "New task added!",
+};
 const alert = document.querySelector(".alert");
 const form = document.querySelector(".todo-form");
+const input = document.getElementById("todo");
 const list = document.querySelector(".task-container");
-const clearBtn = querySelector(".clear-btn");
+const clearBtn = document.querySelector(".clear-btn");
 
-function taskHTML(t) {
+function Task(text, id = "9999", done = false) {
+  this.text = text;
+  this.done = done;
+  this.id = id;
+}
+
+function showAlert(text, type) {
+  alert.textContent = text;
+  alert.classList.add("show");
+  alert.classList.add(type);
+  setTimeout(() => {
+    alert.className = "alert";
+  }, ALERT_TIMEOUT);
+}
+function resetState() {
+  isEditing = false;
+}
+function taskToHTML(t) {
   return `<article class="task">
     <span class=".task-text">${t.text}</span>
     <span class="btn-group">
@@ -29,3 +55,32 @@ function taskHTML(t) {
     </span>
   </article>`;
 }
+function timeStamp() {
+  return new Date().getTime().toString();
+}
+function renderTaskList() {
+  list.innerHTML = tasks.map(taskToHTML).join("");
+  if (tasks.length > 0) {
+    clearBtn.classList.add("show");
+  }
+}
+function handleSubmit(e) {
+  e.preventDefault();
+  const inputValue = input.value;
+
+  if (!inputValue && !isEditing) {
+    showAlert(MESSAGES.EMPTY_NEW, DANGER);
+  } else if (!inputValue && isEditing) {
+    showAlert(MESSAGES.EMPTY_UPDATE, DANGER);
+  } else if (inputValue && !isEditing) {
+    const newTask = new Task(inputValue, timeStamp());
+    tasks.unshift(newTask);
+    showAlert(MESSAGES.NEW_TASK, SUCCESS);
+  }
+  renderTaskList();
+  resetState();
+}
+
+renderTaskList();
+
+form.addEventListener("submit", handleSubmit);
