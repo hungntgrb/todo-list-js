@@ -61,6 +61,9 @@ body {
   letter-spacing: 0.2em;
   color: var(--dark-blue);
 }
+.editingNoti {
+  margin: 1rem 0;
+}
 .todo-form {
   display: grid;
   grid-template-columns: 3fr 1fr;

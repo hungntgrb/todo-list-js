@@ -1,7 +1,7 @@
 let tasks;
 loadTasksFromLocalStorage();
 
-const ALERT_TIMEOUT = 4000;
+const ALERT_TIMEOUT = 3200;
 const DANGER = "danger";
 const SUCCESS = "success";
 let isEditing = false;
@@ -27,7 +27,7 @@ const submitBtn = document.querySelector(".submit-btn");
 const SUBMIT = { SAVE: "save", ADD: "add" };
 let TIMEOUT = null;
 const noTaskTemplate = `<p class="no-task">No tasks to show!</p>`;
-// ========== FUNCTIONS =================
+// ============ FUNCTIONS =================
 function resetTimeout() {
   clearTimeout(TIMEOUT);
 }
@@ -109,6 +109,7 @@ function renderClearButton() {
 function handleSubmit(e) {
   resetTimeout();
   e.preventDefault();
+  hideEditing();
   const inputValue = input.value;
 
   if (!inputValue && !isEditing) {
@@ -141,15 +142,27 @@ function setTaskText(idx, txt) {
   tasks.find((t) => t.id === idx).text = txt;
 }
 function editingOn(e) {
+  if (isEditing) {
+    return;
+  }
+  showEditing();
   const editButton = e.currentTarget;
-  isEditing = true;
 
-  editingText = grabAssociatedText(editButton);
   editingElem = grabTaskItem(editButton);
-  editingElem.style.backgroundColor = EDITING_COLOR;
+  changeColorToEditing();
+  editingText = grabAssociatedText(editButton);
   editingID = grabTaskItem(editButton).id;
   setInput(editingText);
+  isEditing = true;
   renderSubmitBtn();
+}
+function changeColorToEditing() {
+  if (isEditing) {
+    return;
+  } else if (editingElem === null) {
+    return;
+  }
+  editingElem.style.backgroundColor = EDITING_COLOR;
 }
 function removeItem(e) {
   const ok = window.confirm("Delete task?");
@@ -192,6 +205,21 @@ function renderSubmitBtn() {
     submitBtn.classList.remove("edit");
     submitBtn.textContent = SUBMIT.ADD;
   }
+}
+function showEditing() {
+  if (isEditing) {
+    return;
+  }
+  list.insertAdjacentHTML(
+    "beforebegin",
+    `<div class="editingNoti">Editing...</div>`
+  );
+}
+function hideEditing() {
+  if (!isEditing) {
+    return;
+  }
+  document.querySelector(".editingNoti").remove();
 }
 
 // ------------------------------------------------------
