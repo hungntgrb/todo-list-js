@@ -1,7 +1,6 @@
-let tasks = [
-  { text: "Viec 1", id: "123", done: false },
-  { text: "Viec 2", id: "234", done: false },
-];
+let tasks;
+loadTasksFromLocalStorage();
+
 const ALERT_TIMEOUT = 4000;
 const DANGER = "danger";
 const SUCCESS = "success";
@@ -25,8 +24,8 @@ const submitBtn = document.querySelector(".submit-btn");
 
 function Task(text, id = "9999", done = false) {
   this.text = text;
-  this.done = done;
   this.id = id;
+  this.done = done;
 }
 function setInput(val) {
   input.value = val;
@@ -97,10 +96,12 @@ function handleSubmit(e) {
   }
 
   resetState();
+  saveTasksToLocalStorage();
 }
 
 function removeAllItems() {
   tasks = [];
+  saveTasksToLocalStorage();
   showAlert(MESSAGES.ALL_CLEARED, SUCCESS);
   renderTaskList();
 }
@@ -131,6 +132,13 @@ function removeItem(e) {
   resetState();
 }
 
+function saveTasksToLocalStorage() {
+  localStorage.setItem("todo-tasks", JSON.stringify(tasks));
+}
+function loadTasksFromLocalStorage() {
+  tasks = JSON.parse(localStorage.getItem("todo-tasks")) || [];
+}
+
 function renderSubmitBtn() {
   if (isEditing) {
     submitBtn.classList.add("edit");
@@ -141,11 +149,7 @@ function renderSubmitBtn() {
   }
 }
 
-renderTaskList();
-
-form.addEventListener("submit", handleSubmit);
-clearBtn.addEventListener("click", removeAllItems);
-// ---
+// ------------------------------------------------------
 function listenToModify() {
   const taskElems = document.querySelectorAll(".task");
   taskElems.forEach((elem) => {
@@ -156,5 +160,11 @@ function listenToModify() {
     deleteBtn.addEventListener("click", removeItem);
   });
 }
+
+renderTaskList();
+
+form.addEventListener("submit", handleSubmit);
+
+clearBtn.addEventListener("click", removeAllItems);
 
 setInterval(listenToModify, 100);
