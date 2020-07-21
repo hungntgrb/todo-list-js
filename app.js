@@ -7,6 +7,7 @@ const SUCCESS = "success";
 let isEditing = false;
 let editingID = "";
 let editingElem = null;
+let editingText = "";
 const EDITING_COLOR = "#DBFCFF";
 const MESSAGES = {
   ITEM_ADDED: "Item added!",
@@ -26,9 +27,15 @@ const submitBtn = document.querySelector(".submit-btn");
 const SUBMIT = { SAVE: "save", ADD: "add" };
 let TIMEOUT = null;
 const noTaskTemplate = `<p class="no-task">No tasks to show!</p>`;
-
+// ========== FUNCTIONS =================
 function resetTimeout() {
   clearTimeout(TIMEOUT);
+}
+function updateTaskTextFromInput() {
+  if (editingElem === null) {
+    return;
+  }
+  editingElem.firstElementChild.textContent = input.value;
 }
 function Task(text, id = "9999", done = false) {
   this.text = text;
@@ -54,6 +61,8 @@ function resetState() {
   isEditing = false;
   setInput("");
   editingID = "";
+  editingElem = null;
+  editingText = "";
   renderSubmitBtn();
   renderTaskList();
 }
@@ -131,14 +140,15 @@ function grabTaskTextElem(btn) {
 function setTaskText(idx, txt) {
   tasks.find((t) => t.id === idx).text = txt;
 }
-function editOn(e) {
-  const eBtn = e.currentTarget;
+function editingOn(e) {
+  const editButton = e.currentTarget;
   isEditing = true;
-  const text = grabAssociatedText(eBtn);
-  editingElem = grabTaskItem(eBtn);
+
+  editingText = grabAssociatedText(editButton);
+  editingElem = grabTaskItem(editButton);
   editingElem.style.backgroundColor = EDITING_COLOR;
-  editingID = grabTaskItem(eBtn).id;
-  setInput(text);
+  editingID = grabTaskItem(editButton).id;
+  setInput(editingText);
   renderSubmitBtn();
 }
 function removeItem(e) {
@@ -162,6 +172,8 @@ function removeAllItems() {
     saveTasksToLocalStorage();
     showAlert(MESSAGES.ALL_CLEARED, SUCCESS);
     renderTaskList();
+  } else {
+    return;
   }
 }
 
@@ -189,7 +201,7 @@ function listenToModify() {
     const editBtn = elem.querySelector(".bi-pencil");
     const deleteBtn = elem.querySelector(".bi-trash");
 
-    editBtn.addEventListener("click", editOn);
+    editBtn.addEventListener("click", editingOn);
     deleteBtn.addEventListener("click", removeItem);
   });
 }
@@ -202,3 +214,5 @@ form.addEventListener("submit", handleSubmit);
 clearBtn.addEventListener("click", removeAllItems);
 
 setInterval(listenToModify, 100);
+
+input.oninput = updateTaskTextFromInput;
