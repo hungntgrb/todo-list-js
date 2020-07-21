@@ -6,11 +6,13 @@ const DANGER = "danger";
 const SUCCESS = "success";
 let isEditing = false;
 let editingID = "";
+let editingElem = null;
+const EDITING_COLOR = "#DBFCFF";
 const MESSAGES = {
   ITEM_ADDED: "Item added!",
   ITEM_REMOVED: "Item removed!",
   ITEM_UPDATED: "Item updated!",
-  EMPTY_NEW: "Nothing to add to tasks!",
+  EMPTY_NEW: "Nothing to add!",
   EMPTY_UPDATE: "Nothing to update!",
   NEW_TASK: "New task added!",
   ALL_CLEARED: "Removed all items!",
@@ -21,7 +23,13 @@ const input = document.getElementById("todo");
 const list = document.querySelector(".task-container");
 const clearBtn = document.querySelector(".clear-btn");
 const submitBtn = document.querySelector(".submit-btn");
+const SUBMIT = { SAVE: "save", ADD: "add" };
+let TIMEOUT = null;
+const noTaskTemplate = `<p class="no-task">No tasks to show!</p>`;
 
+function resetTimeout() {
+  clearTimeout(TIMEOUT);
+}
 function Task(text, id = "9999", done = false) {
   this.text = text;
   this.id = id;
@@ -35,9 +43,12 @@ function showAlert(text, type) {
   alert.textContent = text;
   alert.classList.add("show");
   alert.classList.add(type);
-  setTimeout(() => {
-    alert.className = "alert";
+  TIMEOUT = setTimeout(() => {
+    hideAlert();
   }, ALERT_TIMEOUT);
+}
+function hideAlert() {
+  alert.className = "alert";
 }
 function resetState() {
   isEditing = false;
@@ -48,7 +59,7 @@ function resetState() {
 }
 function taskToHTML(t) {
   return `<article class="task" id=${t.id} draggable="true">
-    <span class=".task-text">${t.text}</span>
+    <span class="task-text">${t.text}</span>
     <span class="btn-group">
       <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor"
         xmlns="http://www.w3.org/2000/svg">
@@ -71,7 +82,15 @@ function timeStamp() {
   return new Date().getTime().toString();
 }
 function renderTaskList() {
-  list.innerHTML = tasks.map(taskToHTML).join("");
+  if (tasks.length > 0) {
+    list.innerHTML = tasks.map(taskToHTML).join("");
+  } else {
+    list.innerHTML = noTaskTemplate;
+  }
+
+  renderClearButton();
+}
+function renderClearButton() {
   if (tasks.length > 0) {
     clearBtn.classList.add("show");
   } else {
@@ -79,6 +98,7 @@ function renderTaskList() {
   }
 }
 function handleSubmit(e) {
+  resetTimeout();
   e.preventDefault();
   const inputValue = input.value;
 
@@ -99,12 +119,6 @@ function handleSubmit(e) {
   saveTasksToLocalStorage();
 }
 
-function removeAllItems() {
-  tasks = [];
-  saveTasksToLocalStorage();
-  showAlert(MESSAGES.ALL_CLEARED, SUCCESS);
-  renderTaskList();
-}
 function grabAssociatedText(btn) {
   return btn.parentElement.previousElementSibling.textContent;
 }
@@ -118,18 +132,37 @@ function setTaskText(idx, txt) {
   tasks.find((t) => t.id === idx).text = txt;
 }
 function editOn(e) {
+  const eBtn = e.currentTarget;
   isEditing = true;
-  const text = grabAssociatedText(e.currentTarget);
-  editingID = grabTaskItem(e.currentTarget).id;
+  const text = grabAssociatedText(eBtn);
+  editingElem = grabTaskItem(eBtn);
+  editingElem.style.backgroundColor = EDITING_COLOR;
+  editingID = grabTaskItem(eBtn).id;
   setInput(text);
   renderSubmitBtn();
 }
 function removeItem(e) {
-  const elem = grabTaskItem(e.currentTarget);
-  tasks = tasks.filter((t) => t.id !== elem.id);
-  showAlert(MESSAGES.ITEM_REMOVED, SUCCESS);
-  renderTaskList();
-  resetState();
+  const ok = window.confirm("Delete task?");
+  if (ok) {
+    resetTimeout();
+    const elem = grabTaskItem(e.currentTarget);
+    tasks = tasks.filter((t) => t.id !== elem.id);
+    showAlert(MESSAGES.ITEM_REMOVED, SUCCESS);
+    renderTaskList();
+    resetState();
+  } else {
+    return;
+  }
+}
+function removeAllItems() {
+  const ok = window.confirm("Delete all tasks?");
+  if (ok) {
+    resetTimeout();
+    tasks = [];
+    saveTasksToLocalStorage();
+    showAlert(MESSAGES.ALL_CLEARED, SUCCESS);
+    renderTaskList();
+  }
 }
 
 function saveTasksToLocalStorage() {
@@ -142,10 +175,10 @@ function loadTasksFromLocalStorage() {
 function renderSubmitBtn() {
   if (isEditing) {
     submitBtn.classList.add("edit");
-    submitBtn.textContent = "save";
+    submitBtn.textContent = SUBMIT.SAVE;
   } else {
     submitBtn.classList.remove("edit");
-    submitBtn.textContent = "submit";
+    submitBtn.textContent = SUBMIT.ADD;
   }
 }
 
@@ -161,6 +194,7 @@ function listenToModify() {
   });
 }
 
+window.onload = resetState;
 renderTaskList();
 
 form.addEventListener("submit", handleSubmit);

@@ -11,6 +11,7 @@
   --dark-red: #ac3232;
   --light-red: rgb(255, 215, 215);
   --light-green: hsl(120, 35%, 82%);
+  --grass: rgb(202, 213, 156);
 }
 body {
   padding: 1rem 0.2rem;
@@ -20,7 +21,7 @@ body {
   row-gap: 1rem;
   place-content: center;
   min-height: 100vh;
-  background-color: rgb(202, 213, 156);
+  background-color: var(--grass);
 }
 .container {
   grid-column: 2;
@@ -40,7 +41,7 @@ body {
   border-radius: 0.3em;
   display: none;
   font-weight: bold;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 .danger {
   background-color: var(--light-red);
@@ -93,14 +94,18 @@ body {
 .task {
   padding: 1rem 1.1rem;
   margin: 0.4rem 0;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
   align-items: center;
   background-color: #f8f8f8;
   color: rgb(27, 27, 27);
   border-radius: 0.3em;
   box-shadow: 0 0 0.6rem -2px #111;
   cursor: move;
+}
+.task-text {
+  text-align: start;
 }
 .btn-group {
   line-height: 1em;
