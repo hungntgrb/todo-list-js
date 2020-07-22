@@ -1,4 +1,4 @@
-import { sanitizeInput } from "./escapeUserInput.js";
+import { sanitizeInput } from "./escapeUserInput";
 
 let tasks;
 loadTasksFromLocalStorage();
