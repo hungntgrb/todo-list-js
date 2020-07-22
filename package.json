@@ -1,0 +1,23 @@
+{
+  "name": "p14_todo_list",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hungntgrb/todo-list-js.git"
+  },
+  "keywords": [],
+  "author": "Hung T. Nguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hungntgrb/todo-list-js/issues"
+  },
+  "homepage": "https://github.com/hungntgrb/todo-list-js#readme",
+  "devDependencies": {
+    "jest": "^26.1.0"
+  }
+}
