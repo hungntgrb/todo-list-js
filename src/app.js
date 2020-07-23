@@ -1,18 +1,19 @@
 import { sanitizeInput } from "./escapeUserInput";
-import "./bonjour.scss";
+import "./main.scss";
 
 let tasks = [];
 loadTasksFromLocalStorage();
 
 console.log("Hi");
 
-const ALERT_TIMEOUT = 3200;
+const ALERT_TIMEOUT = 2600;
 const DANGER = "danger";
 const SUCCESS = "success";
 let isEditing = false;
 let editingID = "";
 let editingElem = null;
 let editingText = "";
+const COLORS = { EDITING: "#DBFCFF" };
 const EDITING_COLOR = "#DBFCFF";
 const MESSAGES = {
   ITEM_ADDED: "Item added!",
@@ -167,7 +168,7 @@ function changeColorToEditing() {
   } else if (editingElem === null) {
     return;
   }
-  editingElem.style.backgroundColor = EDITING_COLOR;
+  editingElem.style.backgroundColor = COLORS.EDITING;
 }
 function removeItem(e) {
   const ok = window.confirm("Delete task?");
