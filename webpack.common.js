@@ -6,6 +6,15 @@ module.exports = {
   module: {
     rules: [
       { test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"] },
+      { test: /\.html$/, use: ["html-loader"] },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/,
+        loader: "file-loader",
+        options: {
+          name: "[name].[sha256:hash:base64:8].[ext]",
+          outputPath: "imgs",
+        },
+      },
     ],
   },
   plugins: [

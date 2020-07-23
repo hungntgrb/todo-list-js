@@ -33,6 +33,7 @@ body {
   text-align: center;
   border-radius: 0.3em;
   box-shadow: 0 0 1rem -1px black;
+  position: relative;
 }
 .alert {
   padding: 1rem;
@@ -60,6 +61,11 @@ body {
   text-align: center;
   letter-spacing: 0.2em;
   color: var(--dark-blue);
+}
+.icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 .editingNoti {
   margin: 1rem 0;
