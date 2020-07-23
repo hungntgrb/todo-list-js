@@ -1,6 +1,7 @@
 import { sanitizeInput } from "./escapeUserInput";
+import "./main.css";
 
-let tasks;
+let tasks = [];
 loadTasksFromLocalStorage();
 
 const ALERT_TIMEOUT = 3200;
