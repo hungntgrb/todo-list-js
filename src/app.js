@@ -1,8 +1,10 @@
 import { sanitizeInput } from "./escapeUserInput";
-import "./main.css";
+import "./bonjour.scss";
 
 let tasks = [];
 loadTasksFromLocalStorage();
+
+console.log("Hi");
 
 const ALERT_TIMEOUT = 3200;
 const DANGER = "danger";
