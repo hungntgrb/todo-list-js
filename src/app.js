@@ -53,17 +53,6 @@ function setInput(val) {
   input.value = val;
 }
 
-function showAlert(text, type) {
-  alert.textContent = text;
-  alert.classList.add("show");
-  alert.classList.add(type);
-  TIMEOUT = setTimeout(() => {
-    hideAlert();
-  }, ALERT_TIMEOUT);
-}
-function hideAlert() {
-  alert.className = "alert";
-}
 function resetState() {
   isEditing = false;
   setInput("");
@@ -120,6 +109,9 @@ function displayAlertThenHide(text, color, elem) {
 function inAddingModeAndNoInput(input_) {
   return !input_ && !isEditing;
 }
+function inEditModeAndNoInput(input_) {
+  return !input_ && isEditing;
+}
 function handleSubmit(e) {
   e.preventDefault();
   resetTimeout();
@@ -128,15 +120,15 @@ function handleSubmit(e) {
 
   if (inAddingModeAndNoInput(inputValue)) {
     displayAlertThenHide(MESSAGES.EMPTY_NEW, DANGER, CONTAINER);
-  } else if (!inputValue && isEditing) {
-    showAlert(MESSAGES.EMPTY_UPDATE, DANGER);
+  } else if (inEditModeAndNoInput(inputValue)) {
+    displayAlertThenHide(MESSAGES.EMPTY_UPDATE, DANGER, CONTAINER);
   } else if (inputValue && !isEditing) {
     const newTask = new Task(inputValue, timeStamp());
     tasks.unshift(newTask);
-    showAlert(MESSAGES.NEW_TASK, SUCCESS);
+    displayAlertThenHide(MESSAGES.NEW_TASK, SUCCESS, CONTAINER);
   } else if (inputValue && isEditing) {
     setTaskText(editingID, inputValue);
-    showAlert(MESSAGES.ITEM_UPDATED, SUCCESS);
+    displayAlertThenHide(MESSAGES.ITEM_UPDATED, SUCCESS, CONTAINER);
   }
 
   resetState();
@@ -184,7 +176,7 @@ function removeItem(e) {
     resetTimeout();
     const elem = grabTaskItem(e.currentTarget);
     tasks = tasks.filter((t) => t.id !== elem.id);
-    showAlert(MESSAGES.ITEM_REMOVED, SUCCESS);
+    displayAlertThenHide(MESSAGES.ITEM_REMOVED, SUCCESS, CONTAINER);
     renderTaskList();
     resetState();
   } else {
@@ -197,7 +189,7 @@ function removeAllItems() {
     resetTimeout();
     tasks = [];
     saveTasksToLocalStorage();
-    showAlert(MESSAGES.ALL_CLEARED, SUCCESS);
+    displayAlertThenHide(MESSAGES.ALL_CLEARED, SUCCESS, CONTAINER);
     renderTaskList();
   } else {
     return;
