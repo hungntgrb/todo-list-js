@@ -1,4 +1,4 @@
-function isHTML(text) {
+export function isHTML(text) {
   let match = text.match(/<\w*?>|<\/\w*?>/);
   if (match === null) {
     return false;
@@ -7,10 +7,10 @@ function isHTML(text) {
     return true;
   }
 }
-function escapeHTML(text) {
+export function escapeHTML(text) {
   return text.replace(/<\/\w*?>/gi, "");
 }
-function escapeTag(text) {
+export function escapeTag(text) {
   return text.replace(/<\w*?>/gi, "");
 }
 export function sanitizeInput(value_) {

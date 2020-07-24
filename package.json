@@ -12,6 +12,11 @@
   "jest": {
     "verbose": true
   },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hungntgrb/todo-list-js.git"
