@@ -32,7 +32,7 @@ const list = document.querySelector(".task-container");
 const clearBtn = document.querySelector(".clear-btn");
 const submitBtn = document.querySelector(".submit-btn");
 const SUBMIT = { SAVE: "save", ADD: "add" };
-let TIMEOUT = null;
+let TIMEOUT = 9898;
 const noTaskTemplate = `<p class="no-task">No tasks to show!</p>`;
 // ============ FUNCTIONS =================
 function resetTimeout() {
@@ -103,8 +103,10 @@ function renderClearButton() {
   }
 }
 function displayAlertThenHide(text, color, elem) {
+  resetTimeout();
+  hideAlertMsg();
   displayAlert(text, color, elem);
-  setTimeout(hideAlertMsg, ALERT_TIMEOUT);
+  TIMEOUT = setTimeout(hideAlertMsg, ALERT_TIMEOUT);
 }
 function inAddingModeAndNoInput(input_) {
   return !input_ && !isEditing;

@@ -16,6 +16,11 @@ export function displayAlert(text, color, elem) {
 }
 
 export function hideAlertMsg() {
-  document.querySelector(".alert").remove();
-  return `Alert removed!`;
+  const alertDiv = document.querySelector(".alert");
+  if (alertDiv === null) {
+    return `No such element!`;
+  } else {
+    alertDiv.remove();
+    return `Alert removed!`;
+  }
 }
