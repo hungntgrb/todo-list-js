@@ -1,10 +1,10 @@
+console.log("app.js runs!");
 import { sanitizeInput } from "./escapeUserInput";
+import { displayAlert, hideAlertMsg } from "./AlertComponent";
 import "./main.scss";
 
 let tasks = [];
 loadTasksFromLocalStorage();
-
-console.log("Hi there");
 
 const ALERT_TIMEOUT = 2600;
 const DANGER = "danger";
@@ -24,6 +24,7 @@ const MESSAGES = {
   NEW_TASK: "New task added!",
   ALL_CLEARED: "Removed all items!",
 };
+const CONTAINER = document.querySelector(".container");
 const alert = document.querySelector(".alert");
 const form = document.querySelector(".todo-form");
 const input = document.getElementById("todo");
@@ -112,14 +113,21 @@ function renderClearButton() {
     clearBtn.className = "clear-btn";
   }
 }
+function displayAlertThenHide(text, color, elem) {
+  displayAlert(text, color, elem);
+  setTimeout(hideAlertMsg, ALERT_TIMEOUT);
+}
+function inAddingModeAndNoInput(input_) {
+  return !input_ && !isEditing;
+}
 function handleSubmit(e) {
   e.preventDefault();
   resetTimeout();
   hideEditing();
   let inputValue = sanitizeInput(input.value);
 
-  if (!inputValue && !isEditing) {
-    showAlert(MESSAGES.EMPTY_NEW, DANGER);
+  if (inAddingModeAndNoInput(inputValue)) {
+    displayAlertThenHide(MESSAGES.EMPTY_NEW, DANGER, CONTAINER);
   } else if (!inputValue && isEditing) {
     showAlert(MESSAGES.EMPTY_UPDATE, DANGER);
   } else if (inputValue && !isEditing) {

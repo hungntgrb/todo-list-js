@@ -37,11 +37,14 @@ body {
   position: relative;
 }
 .alert {
-  padding: 1rem;
+  padding: 0.4rem;
   margin: 0 0 1rem;
   text-align: center;
   border-radius: 0.3em;
-  display: none;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  position: relative;
   font-weight: bold;
   letter-spacing: 0.08em;
 }
@@ -63,10 +66,10 @@ body {
   letter-spacing: 0.2em;
   color: var(--dark-blue);
 }
-.icon {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+.alert-icon {
+  position: relative;
+  top: 0;
+  right: 0;
 }
 .editingNoti {
   margin: 1rem 0;
