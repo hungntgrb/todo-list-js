@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 module.exports = {
-  entry: "./src/app.js",
+  entry: { main: "./src/app.js", vendor: "./src/vendor.js" },
   module: {
     rules: [
       { test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"] },
