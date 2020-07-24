@@ -1,1 +1,1 @@
-alert("Hello from VENDOR!");
+alert("HELLO FROM VENDOR");
