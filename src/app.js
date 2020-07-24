@@ -4,7 +4,7 @@ import "./main.scss";
 let tasks = [];
 loadTasksFromLocalStorage();
 
-console.log("Hi");
+console.log("Hi there");
 
 const ALERT_TIMEOUT = 2600;
 const DANGER = "danger";
