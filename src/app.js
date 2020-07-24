@@ -2,6 +2,7 @@ console.log("app.js runs!");
 import { sanitizeInput } from "./escapeUserInput";
 import { displayAlert, hideAlertMsg } from "./AlertComponent";
 import "./main.scss";
+import { changeTaskStatus, collectAllTaskElems } from "./js/taskDone";
 
 let tasks = [];
 loadTasksFromLocalStorage();
@@ -135,6 +136,7 @@ function handleSubmit(e) {
 
   resetState();
   saveTasksToLocalStorage();
+  listenToClick();
 }
 
 function grabAssociatedText(btn) {
@@ -231,6 +233,12 @@ function hideEditing() {
 }
 
 // ------------------------------------------------------
+function listenToClick() {
+  const taskElems = collectAllTaskElems();
+  taskElems.forEach((el) => {
+    el.addEventListener("click", changeTaskStatus);
+  });
+}
 function listenToModify() {
   const taskElems = document.querySelectorAll(".task");
   taskElems.forEach((elem) => {
