@@ -5,12 +5,29 @@ import "./main.scss";
 import {
   changeTaskStatus,
   collectAllTaskElems,
-  collectAllTaskTextElems,
   listenToClick,
 } from "./js/taskDone";
 
 export let tasks = [];
 loadTasksFromLocalStorage();
+
+let currentTasksString = JSON.stringify(tasks);
+
+function ifTasksChangedThenRenderAndListen() {
+  if (tasksHasChanged()) {
+    console.log("tasks has changed");
+    currentTasksString = JSON.stringify(tasks);
+    saveTasksToLocalStorage();
+    renderTaskListAndListen();
+  }
+}
+function tasksHasChanged() {
+  return JSON.stringify(tasks) !== currentTasksString;
+}
+function renderTaskListAndListen() {
+  renderTaskList();
+  listenToClick();
+}
 
 // export let tasks = [
 //   { text: "1QWERTYUIOP", id: "123654", done: true },
@@ -23,10 +40,9 @@ const ALERT_TIMEOUT = 2600;
 const DANGER = "danger";
 const SUCCESS = "success";
 let isEditing = false;
-let editingID = "";
+let editingTask = emptyTask();
 let editingElem = null;
-let editingText = "";
-const COLORS = { EDITING: "rgb(192, 255, 252)" };
+const COLORS = { EDITING: "rgb(192, 255, 252)", NOTEDITING: "#f8f8f8" };
 const MESSAGES = {
   ITEM_ADDED: "Item added!",
   ITEM_REMOVED: "Item removed!",
@@ -47,6 +63,9 @@ const SUBMIT = { SAVE: "save", ADD: "add" };
 let TIMEOUT = 9898;
 const noTaskTemplate = `<p class="no-task">No tasks to show!</p>`;
 // ============ FUNCTIONS =================
+function logCurrentState() {
+  console.log("STATE: " + (isEditing ? "Editing..." : `not Editing.`));
+}
 function resetTimeout() {
   clearTimeout(TIMEOUT);
 }
@@ -61,18 +80,23 @@ function Task(text, id = "9999zxw", done = false) {
   this.id = id;
   this.done = done;
 }
+function emptyTask() {
+  return new Task("", "", false);
+}
+function emptyInput() {
+  input.value = "";
+}
 function setInput(val) {
   input.value = val;
 }
 
 function resetState() {
-  isEditing = false;
-  setInput("");
-  editingID = "";
+  console.log("State reset!");
+  turnOffEditingMode();
+  emptyInput();
   editingElem = null;
-  editingText = "";
+  editingTask = emptyTask();
   renderSubmitBtn();
-  renderTaskList();
 }
 function taskToHTML(t) {
   return `<article class="task ${t.done ? "done" : ""}" id=${
@@ -101,15 +125,15 @@ function timeStamp() {
   return new Date().getTime().toString();
 }
 export function renderTaskList() {
+  console.log("  Task-list rendered!");
   if (tasks.length > 0) {
     list.innerHTML = tasks.map(taskToHTML).join("");
   } else {
     list.innerHTML = noTaskTemplate;
   }
-
-  listenToClick();
   renderClearButton();
 }
+
 function renderClearButton() {
   if (tasks.length > 0) {
     clearBtn.classList.add("show");
@@ -123,35 +147,46 @@ function displayAlertThenHide(text, color, elem) {
   displayAlert(text, color, elem);
   TIMEOUT = setTimeout(hideAlertMsg, ALERT_TIMEOUT);
 }
-function inAddingModeAndNoInput(input_) {
-  return !input_ && !isEditing;
+
+function turnOffEditingMode() {
+  isEditing = false;
 }
-function inEditModeAndNoInput(input_) {
-  return !input_ && isEditing;
+function turnOnEditingMode() {
+  isEditing = true;
 }
+//============================================================
 function handleSubmit(e) {
   e.preventDefault();
   resetTimeout();
-  hideEditing();
   let inputValue = sanitizeInput(input.value);
 
-  if (inAddingModeAndNoInput(inputValue)) {
-    displayAlertThenHide(MESSAGES.EMPTY_NEW, DANGER, CONTAINER);
-  } else if (inEditModeAndNoInput(inputValue)) {
-    displayAlertThenHide(MESSAGES.EMPTY_UPDATE, DANGER, CONTAINER);
-  } else if (inputValue && !isEditing) {
-    const newTask = new Task(inputValue, timeStamp());
-    tasks.unshift(newTask);
-    displayAlertThenHide(MESSAGES.NEW_TASK, SUCCESS, CONTAINER);
-  } else if (inputValue && isEditing) {
-    setTaskText(editingID, inputValue);
-    displayAlertThenHide(MESSAGES.ITEM_UPDATED, SUCCESS, CONTAINER);
+  if (isEditing) {
+    if (inputValue) {
+      setTaskText(editingTask.id, inputValue);
+      displayAlertThenHide(MESSAGES.ITEM_UPDATED, SUCCESS, CONTAINER);
+      turnOffEditingMode();
+      hideEditingNoti();
+      editingTask = emptyTask();
+      emptyInput();
+    } else if (!inputValue) {
+      displayAlertThenHide(MESSAGES.EMPTY_UPDATE, DANGER, CONTAINER);
+    }
+    renderEditingElemColor();
+  } else if (!isEditing) {
+    if (inputValue) {
+      const newTask = new Task(inputValue, timeStamp());
+      tasks.unshift(newTask);
+      displayAlertThenHide(MESSAGES.NEW_TASK, SUCCESS, CONTAINER);
+      resetState();
+    } else if (!inputValue) {
+      displayAlertThenHide(MESSAGES.EMPTY_NEW, DANGER, CONTAINER);
+    }
   }
 
-  resetState();
   saveTasksToLocalStorage();
+  logCurrentState();
 }
-
+//============================================================
 function grabAssociatedText(btn) {
   return btn.parentElement.previousElementSibling.textContent;
 }
@@ -168,24 +203,26 @@ function editingOn(e) {
   if (isEditing) {
     return;
   }
-  showEditing();
+  turnOnEditingMode();
   const editButton = e.currentTarget;
 
   editingElem = grabTaskItem(editButton);
-  changeColorToEditing();
-  editingText = grabAssociatedText(editButton);
-  editingID = grabTaskItem(editButton).id;
-  setInput(editingText);
-  isEditing = true;
+  console.log(editingElem);
+  editingTask.text = grabAssociatedText(editButton);
+  editingTask.id = grabTaskItem(editButton).id;
+  setInput(editingTask.text);
+
+  renderEditing();
+  renderEditingElemColor();
   renderSubmitBtn();
+  logCurrentState();
 }
-function changeColorToEditing() {
+function renderEditingElemColor() {
   if (isEditing) {
-    return;
-  } else if (editingElem === null) {
-    return;
+    editingElem.style.backgroundColor = COLORS.EDITING;
+  } else {
+    editingElem.style.backgroundColor = COLORS.NOTEDITING;
   }
-  editingElem.style.backgroundColor = COLORS.EDITING;
 }
 function removeItem(e) {
   const ok = window.confirm("Delete task?");
@@ -195,7 +232,10 @@ function removeItem(e) {
     tasks = tasks.filter((t) => t.id !== elem.id);
     saveTasksToLocalStorage();
     displayAlertThenHide(MESSAGES.ITEM_REMOVED, SUCCESS, CONTAINER);
-    renderTaskList();
+    renderTaskListAndListen();
+    if (isEditing) {
+      hideEditingNoti();
+    }
     resetState();
   } else {
     return;
@@ -208,7 +248,11 @@ function removeAllItems() {
     tasks = [];
     saveTasksToLocalStorage();
     displayAlertThenHide(MESSAGES.ALL_CLEARED, SUCCESS, CONTAINER);
-    renderTaskList();
+    renderTaskListAndListen();
+    if (isEditing) {
+      hideEditingNoti();
+    }
+    resetState();
   } else {
     return;
   }
@@ -230,19 +274,17 @@ function renderSubmitBtn() {
     submitBtn.textContent = SUBMIT.ADD;
   }
 }
-function showEditing() {
+function renderEditing() {
   if (isEditing) {
+    list.insertAdjacentHTML(
+      "beforebegin",
+      `<div class="editingNoti">Editing...</div>`
+    );
+  } else {
     return;
   }
-  list.insertAdjacentHTML(
-    "beforebegin",
-    `<div class="editingNoti">Editing...</div>`
-  );
 }
-function hideEditing() {
-  if (!isEditing) {
-    return;
-  }
+function hideEditingNoti() {
   document.querySelector(".editingNoti").remove();
 }
 
@@ -258,9 +300,12 @@ function listenToModify() {
 }
 // ------------------------------------------------------
 
-window.onload = resetState;
+window.addEventListener("DOMContentLoaded", resetState);
 
-renderTaskList();
+// setInterval(logCurrentState, 500);
+if (tasks.length > 0) {
+  renderTaskListAndListen();
+}
 
 form.addEventListener("submit", handleSubmit);
 
@@ -269,3 +314,4 @@ clearBtn.addEventListener("click", removeAllItems);
 setInterval(listenToModify, 100);
 
 input.oninput = updateTaskTextFromInput;
+const t1 = setInterval(ifTasksChangedThenRenderAndListen, 330);

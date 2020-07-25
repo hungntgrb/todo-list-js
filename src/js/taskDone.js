@@ -16,10 +16,9 @@ export function changeTaskStatus(e) {
   console.log("'Done' status changed!");
   toggleDone(getTaskObj(tasks, e.currentTarget.parentElement.id));
   saveTasksToLocalStorage();
-  renderTaskList();
 }
 export function listenToClick() {
-  console.log("Tasks are listening for click!");
+  console.log("  Tasks are listening for click!");
   const taskElems = collectAllTaskTextElems();
   taskElems.forEach((el) => {
     el.addEventListener("click", changeTaskStatus);
