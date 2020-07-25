@@ -11,30 +11,13 @@ import {
 export let tasks = [];
 loadTasksFromLocalStorage();
 
-let currentTasksString = JSON.stringify(tasks);
-
-function ifTasksChangedThenRenderAndListen() {
-  if (tasksHasChanged()) {
-    console.log("tasks has changed");
-    currentTasksString = JSON.stringify(tasks);
-    saveTasksToLocalStorage();
-    renderTaskListAndListen();
-  }
-}
-function tasksHasChanged() {
-  return JSON.stringify(tasks) !== currentTasksString;
-}
-function renderTaskListAndListen() {
-  renderTaskList();
-  listenToClick();
-}
-
 // export let tasks = [
 //   { text: "1QWERTYUIOP", id: "123654", done: true },
 //   { text: "2ASDFGHJKL", id: "908743", done: false },
 //   { text: "3QWERTYUIOP", id: "345123", done: true },
 //   { text: "4ASDFGHJKL", id: "1g55jj5", done: false },
 // ];
+let currentTasksString = JSON.stringify(tasks);
 
 const ALERT_TIMEOUT = 2600;
 const DANGER = "danger";
@@ -68,6 +51,21 @@ function logCurrentState() {
 }
 function resetTimeout() {
   clearTimeout(TIMEOUT);
+}
+function tasksHasChanged() {
+  return JSON.stringify(tasks) !== currentTasksString;
+}
+function ifTasksChangedThenRenderAndListen() {
+  if (tasksHasChanged()) {
+    console.log("tasks has changed");
+    currentTasksString = JSON.stringify(tasks);
+    saveTasksToLocalStorage();
+    renderTaskListAndListen();
+  }
+}
+function renderTaskListAndListen() {
+  renderTaskList();
+  listenToClick();
 }
 function updateTaskTextFromInput() {
   if (editingElem === null) {
@@ -168,6 +166,7 @@ function handleSubmit(e) {
       hideEditingNoti();
       editingTask = emptyTask();
       emptyInput();
+      renderSubmitBtn();
     } else if (!inputValue) {
       displayAlertThenHide(MESSAGES.EMPTY_UPDATE, DANGER, CONTAINER);
     }
