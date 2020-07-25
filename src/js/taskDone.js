@@ -12,7 +12,7 @@ export function changeTaskStatus(e) {
 }
 export function listenToClick() {
   const taskElems = collectAllTaskElems();
-  taskElems.forEach((t) => {
-    t.addEventListener("click", changeTaskStatus);
+  taskElems.forEach((el) => {
+    el.addEventListener("click", changeTaskStatus);
   });
 }

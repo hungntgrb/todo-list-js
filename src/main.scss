@@ -86,6 +86,9 @@ body {
   border: 1px solid #777;
   padding: 0 0.6rem;
 }
+#todo:hover {
+  border: 2px solid green;
+}
 .submit-btn {
   background-color: var(--light-green);
   color: green;
@@ -116,6 +119,12 @@ body {
   border-radius: 0.3em;
   box-shadow: 0 0 0.6rem -2px #111;
   cursor: move;
+}
+.task.done * {
+  color: #888 !important;
+}
+.task.done .task-text {
+  text-decoration: line-through;
 }
 .task-text {
   text-align: start;

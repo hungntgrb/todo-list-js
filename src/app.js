@@ -2,10 +2,19 @@ console.log("app.js runs!");
 import { sanitizeInput } from "./escapeUserInput";
 import { displayAlert, hideAlertMsg } from "./AlertComponent";
 import "./main.scss";
-import { changeTaskStatus, collectAllTaskElems } from "./js/taskDone";
+import {
+  changeTaskStatus,
+  collectAllTaskElems,
+  listenToClick,
+} from "./js/taskDone";
 
-let tasks = [];
-loadTasksFromLocalStorage();
+// let tasks = [];
+// loadTasksFromLocalStorage();
+
+let tasks = [
+  { text: "QWERTYUIOP", id: "123654", done: true },
+  { text: "ASDFGHJKL", id: "908743", done: false },
+];
 
 const ALERT_TIMEOUT = 2600;
 const DANGER = "danger";
@@ -45,7 +54,7 @@ function updateTaskTextFromInput() {
   }
   editingElem.firstElementChild.textContent = input.value;
 }
-function Task(text, id = "9999", done = false) {
+function Task(text, id = "9999zxw", done = false) {
   this.text = text;
   this.id = id;
   this.done = done;
@@ -64,7 +73,9 @@ function resetState() {
   renderTaskList();
 }
 function taskToHTML(t) {
-  return `<article class="task" id=${t.id} draggable="true">
+  return `<article class="task ${t.done ? "done" : ""}" id=${
+    t.id
+  } draggable="true">
     <span class="task-text">${t.text}</span>
     <span class="btn-group">
       <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor"
@@ -93,6 +104,8 @@ function renderTaskList() {
   } else {
     list.innerHTML = noTaskTemplate;
   }
+
+  listenToClick();
 
   renderClearButton();
 }
@@ -136,7 +149,6 @@ function handleSubmit(e) {
 
   resetState();
   saveTasksToLocalStorage();
-  listenToClick();
 }
 
 function grabAssociatedText(btn) {
@@ -231,16 +243,14 @@ function hideEditing() {
   }
   document.querySelector(".editingNoti").remove();
 }
-
-// ------------------------------------------------------
-function listenToClick() {
-  const taskElems = collectAllTaskElems();
-  taskElems.forEach((el) => {
-    el.addEventListener("click", changeTaskStatus);
-  });
-}
+// function listenToClick() {
+//   const taskElems = collectAllTaskElems();
+//   taskElems.forEach((el) => {
+//     el.addEventListener("click", changeTaskStatus);
+//   });
+// }
 function listenToModify() {
-  const taskElems = document.querySelectorAll(".task");
+  const taskElems = collectAllTaskElems();
   taskElems.forEach((elem) => {
     const editBtn = elem.querySelector(".bi-pencil");
     const deleteBtn = elem.querySelector(".bi-trash");
@@ -249,8 +259,10 @@ function listenToModify() {
     deleteBtn.addEventListener("click", removeItem);
   });
 }
+// ------------------------------------------------------
 
 window.onload = resetState;
+
 renderTaskList();
 
 form.addEventListener("submit", handleSubmit);
