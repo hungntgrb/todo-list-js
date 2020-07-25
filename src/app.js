@@ -214,7 +214,7 @@ function removeAllItems() {
   }
 }
 
-function saveTasksToLocalStorage() {
+export function saveTasksToLocalStorage() {
   localStorage.setItem("todo-tasks", JSON.stringify(tasks));
 }
 function loadTasksFromLocalStorage() {

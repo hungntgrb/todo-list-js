@@ -1,4 +1,4 @@
-import { tasks, renderTaskList } from "../app";
+import { tasks, renderTaskList, saveTasksToLocalStorage } from "../app";
 
 export function getTaskObj(_tasks_, id_) {
   return _tasks_.find((t) => t.id === id_);
@@ -14,9 +14,8 @@ export function collectAllTaskTextElems() {
 }
 export function changeTaskStatus(e) {
   console.log("'Done' status changed!");
-  const t = getTaskObj(tasks, e.currentTarget.parentElement.id);
-  console.log(t);
-  toggleDone(t);
+  toggleDone(getTaskObj(tasks, e.currentTarget.parentElement.id));
+  saveTasksToLocalStorage();
   renderTaskList();
 }
 export function listenToClick() {
