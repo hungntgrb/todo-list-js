@@ -119,7 +119,7 @@ body {
   color: rgb(27, 27, 27);
   border-radius: 0.3em;
   box-shadow: 0 0 0.6rem -2px #111;
-  cursor: move;
+  cursor: pointer;
 }
 .task.done * {
   color: #888 !important;
