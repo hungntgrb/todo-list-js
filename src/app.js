@@ -3,7 +3,7 @@ import { sanitizeInput } from "./escapeUserInput";
 import { displayAlert, hideAlertMsg } from "./AlertComponent";
 import "./main.scss";
 import { collectAllTaskElems, listenToClick } from "./js/taskDone";
-import { breakDownLong } from "./js/utils";
+import { breakDownLong, preventParagraph } from "./js/utils";
 
 export let tasks = [];
 loadTasksFromLocalStorage();
@@ -154,6 +154,7 @@ function handleSubmit(e) {
   e.preventDefault();
   resetTimeout();
   let inputValue = sanitizeInput(input.value);
+  inputValue = preventParagraph(inputValue);
   inputValue = breakDownLong(inputValue);
 
   if (isEditing) {

@@ -11,3 +11,9 @@ export function breakDownLong(text) {
   }
   return text;
 }
+export function preventParagraph(text) {
+  if (text.length > 150) {
+    return "Too long!";
+  }
+  return text;
+}
