@@ -5,16 +5,19 @@ import "./main.scss";
 import {
   changeTaskStatus,
   collectAllTaskElems,
+  collectAllTaskTextElems,
   listenToClick,
 } from "./js/taskDone";
 
-// let tasks = [];
-// loadTasksFromLocalStorage();
+export let tasks = [];
+loadTasksFromLocalStorage();
 
-let tasks = [
-  { text: "QWERTYUIOP", id: "123654", done: true },
-  { text: "ASDFGHJKL", id: "908743", done: false },
-];
+// export let tasks = [
+//   { text: "1QWERTYUIOP", id: "123654", done: true },
+//   { text: "2ASDFGHJKL", id: "908743", done: false },
+//   { text: "3QWERTYUIOP", id: "345123", done: true },
+//   { text: "4ASDFGHJKL", id: "1g55jj5", done: false },
+// ];
 
 const ALERT_TIMEOUT = 2600;
 const DANGER = "danger";
@@ -23,8 +26,7 @@ let isEditing = false;
 let editingID = "";
 let editingElem = null;
 let editingText = "";
-const COLORS = { EDITING: "#DBFCFF" };
-const EDITING_COLOR = "#DBFCFF";
+const COLORS = { EDITING: "rgb(192, 255, 252)" };
 const MESSAGES = {
   ITEM_ADDED: "Item added!",
   ITEM_REMOVED: "Item removed!",
@@ -98,7 +100,7 @@ function taskToHTML(t) {
 function timeStamp() {
   return new Date().getTime().toString();
 }
-function renderTaskList() {
+export function renderTaskList() {
   if (tasks.length > 0) {
     list.innerHTML = tasks.map(taskToHTML).join("");
   } else {
@@ -106,7 +108,6 @@ function renderTaskList() {
   }
 
   listenToClick();
-
   renderClearButton();
 }
 function renderClearButton() {
@@ -192,6 +193,7 @@ function removeItem(e) {
     resetTimeout();
     const elem = grabTaskItem(e.currentTarget);
     tasks = tasks.filter((t) => t.id !== elem.id);
+    saveTasksToLocalStorage();
     displayAlertThenHide(MESSAGES.ITEM_REMOVED, SUCCESS, CONTAINER);
     renderTaskList();
     resetState();
@@ -243,12 +245,7 @@ function hideEditing() {
   }
   document.querySelector(".editingNoti").remove();
 }
-// function listenToClick() {
-//   const taskElems = collectAllTaskElems();
-//   taskElems.forEach((el) => {
-//     el.addEventListener("click", changeTaskStatus);
-//   });
-// }
+
 function listenToModify() {
   const taskElems = collectAllTaskElems();
   taskElems.forEach((elem) => {
