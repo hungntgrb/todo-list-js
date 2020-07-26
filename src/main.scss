@@ -23,7 +23,14 @@ body {
   row-gap: 1rem;
   place-content: center;
   min-height: 100vh;
-  background-color: var(--grass);
+  // background-color: var(--grass);
+
+  background: rgb(182, 217, 189);
+  background: linear-gradient(
+    345deg,
+    rgba(182, 217, 189, 1) 0%,
+    rgba(255, 241, 170, 1) 100%
+  );
 }
 .container {
   grid-column: 2;
@@ -115,7 +122,14 @@ body {
   grid-template-columns: 1fr auto;
   gap: 1rem;
   align-items: center;
-  background-color: #f8f8f8;
+  background: #f8f8f8;
+  // background: rgb(255, 255, 255);
+  // background: linear-gradient(
+  //   180deg,
+  //   rgba(255, 255, 255, 1) 0%,
+  //   rgba(239, 239, 239, 1) 53%,
+  //   rgba(211, 211, 211, 1) 100%
+  // );
   color: rgb(27, 27, 27);
   border-radius: 0.3em;
   box-shadow: 0 0 0.6rem -2px #111;

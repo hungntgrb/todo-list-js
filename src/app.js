@@ -22,7 +22,11 @@ const SUCCESS = "success";
 let isEditing = false;
 let editingTask = emptyTask();
 let editingElem = null;
-const COLORS = { EDITING: "rgb(192, 255, 252)", NOTEDITING: "#f8f8f8" };
+const COLORS = {
+  EDITING: "rgb(192, 255, 252)",
+  NOT_EDITING: "#f8f8f8",
+  EDITING_GRA: `linear-gradient(180deg, rgba(202,242,255,1) 0%, rgba(80,201,255,1) 100%);`,
+};
 const MESSAGES = {
   ITEM_ADDED: "Item added!",
   ITEM_REMOVED: "Item removed!",
@@ -205,7 +209,7 @@ function editingOn(e) {
   const editButton = e.currentTarget;
 
   editingElem = grabTaskItem(editButton);
-  console.log(editingElem);
+
   editingTask.text = grabAssociatedText(editButton);
   editingTask.id = grabTaskItem(editButton).id;
   setInput(editingTask.text);
@@ -217,9 +221,9 @@ function editingOn(e) {
 }
 function renderEditingElemColor() {
   if (isEditing) {
-    editingElem.style.backgroundColor = COLORS.EDITING;
+    editingElem.style.background = COLORS.EDITING;
   } else {
-    editingElem.style.backgroundColor = COLORS.NOTEDITING;
+    editingElem.style.background = COLORS.NOT_EDITING;
   }
 }
 function removeItem(e) {
