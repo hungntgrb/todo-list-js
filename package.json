@@ -6,8 +6,10 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
-    "start": "webpack-dev-server --config webpack.dev.js --open",
-    "build": "webpack --config webpack.prod.js"
+    "start": "parcel ./src/template.html",
+    "build": "parcel build ./src/template.html",
+    "start-webpack": "webpack-dev-server --config webpack.dev.js --open",
+    "build-webpack": "webpack --config webpack.prod.js"
   },
   "jest": {
     "verbose": true
@@ -31,6 +33,7 @@
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
+    "@parcel/transformer-sass": "^2.0.0",
     "babel-jest": "^26.1.0",
     "babel-loader": "^8.1.0",
     "bootstrap": "^4.5.0",
@@ -42,6 +45,7 @@
     "jquery": "^3.5.1",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.14.1",
+    "parcel": "^2.0.0",
     "popper.js": "^1.16.1",
     "sass-loader": "^9.0.2",
     "style-loader": "^1.2.1",

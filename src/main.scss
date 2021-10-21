@@ -9,7 +9,7 @@
 }
 :root {
   --dark-blue: rgb(21, 27, 49);
-  --dark-red: #ac3232;
+  --dark-red: #c53b3b;
   --light-red: rgb(255, 215, 215);
   --light-green: hsl(120, 35%, 82%);
   --grass: rgb(202, 213, 156);
@@ -74,14 +74,17 @@ body {
   letter-spacing: 0.2em;
   color: var(--dark-blue);
 }
+
 .alert-icon {
   position: relative;
   top: 0;
   right: 0;
 }
+
 .editingNoti {
   margin: 1rem 0;
 }
+
 .todo-form {
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -89,14 +92,17 @@ body {
   height: 2.6rem;
   margin: 1rem auto 2rem;
 }
+
 #todo {
   border-radius: 0.3em 0 0 0.3em;
   border: 1px solid #777;
   padding: 0 0.6rem;
 }
+
 #todo:hover {
   border: 2px solid green;
 }
+
 .submit-btn {
   background-color: var(--light-green);
   color: green;
@@ -108,13 +114,16 @@ body {
   cursor: pointer;
   font-family: "Rowdies", cursive;
 }
+
 .submit-btn.edit {
   background-color: var(--light-red);
   color: var(--dark-red);
 }
+
 .task-container {
   margin: 1rem 0;
 }
+
 .task {
   padding: 1rem 1.1rem;
   margin: 0.4rem 0;
@@ -135,29 +144,37 @@ body {
   box-shadow: 0 0 0.6rem -2px #111;
   cursor: pointer;
 }
+
 .task.done * {
   color: #999 !important;
 }
+
 .task.done .task-text {
   text-decoration: line-through;
 }
+
 .task-text {
   text-align: start;
 }
+
 .btn-group {
   line-height: 1em;
 }
+
 .bi {
   cursor: pointer;
   color: var(--dark-blue);
 }
+
 .bi-pencil {
   font-size: 1.4em;
   margin-right: 0.4em;
 }
+
 .bi-trash {
   font-size: 1.4em;
 }
+
 .clear-btn {
   width: fit-content;
   margin: 2rem auto 0;
@@ -173,13 +190,16 @@ body {
   display: none;
   cursor: pointer;
 }
+
 .clear-btn:hover {
   background-color: var(--light-red);
   color: var(--dark-red);
 }
+
 .show {
   display: block;
 }
+
 footer {
   grid-column: 2;
   padding: 1rem;
@@ -195,6 +215,7 @@ footer {
   line-height: 1.6em;
   font-family: "Rowdies", cursive;
 }
+
 .js {
   color: var(--my-yellow);
 }

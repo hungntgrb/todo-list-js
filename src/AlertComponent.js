@@ -1,6 +1,5 @@
 import check_svg from "./pics/check.svg";
 import x_svg from "./pics/xcircle.svg";
-console.log("checkSVG", check_svg);
 
 export function alertElem(text, color) {
   return `<div class="alert ${color}">${text}

@@ -2,3 +2,5 @@ node_modules/
 dist/
 build/
 webpack.prod1.js
+.parcel-cache/
+

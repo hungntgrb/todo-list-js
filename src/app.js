@@ -47,15 +47,19 @@ const SUBMIT = { SAVE: "save", ADD: "add" };
 let TIMEOUT = 9898;
 const noTaskTemplate = `<p class="no-task">No tasks to show!</p>`;
 // ============ FUNCTIONS =================
+
 function logCurrentState() {
   console.log("STATE: " + (isEditing ? "Editing..." : `not Editing.`));
 }
+
 function resetTimeout() {
   clearTimeout(TIMEOUT);
 }
+
 function tasksHasChanged() {
   return JSON.stringify(tasks) !== currentTasksString;
 }
+
 function ifTasksChangedThenRenderAndListen() {
   if (tasksHasChanged()) {
     console.log("tasks has changed");
@@ -64,27 +68,33 @@ function ifTasksChangedThenRenderAndListen() {
     renderTaskListAndListen();
   }
 }
+
 function renderTaskListAndListen() {
   renderTaskList();
   listenToClick();
 }
+
 function updateTaskTextFromInput() {
   if (editingElem === null) {
     return;
   }
   editingElem.firstElementChild.textContent = input.value;
 }
+
 function Task(text, id = "9999zxw", done = false) {
   this.text = text;
   this.id = id;
   this.done = done;
 }
+
 function emptyTask() {
   return new Task("", "", false);
 }
+
 function emptyInput() {
   input.value = "";
 }
+
 function setInput(val) {
   input.value = val;
 }
@@ -97,10 +107,9 @@ function resetState() {
   editingTask = emptyTask();
   renderSubmitBtn();
 }
+
 function taskToHTML(t) {
-  return `<article class="task ${t.done ? "done" : ""}" id=${
-    t.id
-  } draggable="true">
+  return `<div class="task ${t.done ? "done" : ""}" id=${t.id} draggable="true">
     <span class="task-text">${t.text}</span>
     <span class="btn-group">
       <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor"
@@ -118,7 +127,7 @@ function taskToHTML(t) {
           d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
       </svg>
     </span>
-  </article>`;
+  </div>`;
 }
 function timeStamp() {
   return new Date().getTime().toString();
@@ -192,15 +201,19 @@ function handleSubmit(e) {
 function grabAssociatedText(btn) {
   return btn.parentElement.previousElementSibling.textContent;
 }
+
 function grabTaskItem(btn) {
   return btn.parentElement.parentElement;
 }
+
 function grabTaskTextElem(btn) {
   return btn.parentElement.previousElementSibling;
 }
+
 function setTaskText(idx, txt) {
   tasks.find((t) => t.id === idx).text = txt;
 }
+
 function editingOn(e) {
   if (isEditing) {
     return;
@@ -219,6 +232,7 @@ function editingOn(e) {
   renderSubmitBtn();
   logCurrentState();
 }
+
 function renderEditingElemColor() {
   if (isEditing) {
     editingElem.style.background = COLORS.EDITING;
@@ -226,6 +240,7 @@ function renderEditingElemColor() {
     editingElem.style.background = COLORS.NOT_EDITING;
   }
 }
+
 function removeItem(e) {
   const ok = window.confirm("Delete task?");
   if (ok) {
@@ -243,6 +258,7 @@ function removeItem(e) {
     return;
   }
 }
+
 function removeAllItems() {
   const ok = window.confirm("Delete all tasks?");
   if (ok) {
@@ -263,6 +279,7 @@ function removeAllItems() {
 export function saveTasksToLocalStorage() {
   localStorage.setItem("todo-tasks", JSON.stringify(tasks));
 }
+
 function loadTasksFromLocalStorage() {
   tasks = JSON.parse(localStorage.getItem("todo-tasks")) || [];
 }
@@ -276,6 +293,7 @@ function renderSubmitBtn() {
     submitBtn.textContent = SUBMIT.ADD;
   }
 }
+
 function renderEditing() {
   if (isEditing) {
     list.insertAdjacentHTML(
@@ -286,6 +304,7 @@ function renderEditing() {
     return;
   }
 }
+
 function hideEditingNoti() {
   document.querySelector(".editingNoti").remove();
 }

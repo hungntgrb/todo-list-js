@@ -11,15 +11,18 @@ export function breakDownLong(text) {
   }
   return text;
 }
+
 export function preventParagraph(text) {
   if (text.length > 150) {
-    return "!PARAGRAPH";
+    return "Too long!";
   }
   return text;
 }
+
 export function removeHTML(text) {
   return text.replace(/<\/?.*?>/g, "");
 }
+
 export function zeroLengthOrAllSpace(text) {
   if (/^\s*$/.test(text)) {
     return "!NOINPUT";
