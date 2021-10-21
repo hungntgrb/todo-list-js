@@ -1,5 +1,4 @@
 node_modules/
 dist/
 build/
-webpack.config.js
-tests/
+webpack.prod1.js
