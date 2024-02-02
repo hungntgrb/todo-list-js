@@ -1,4 +1,9 @@
 # TodoList with vanilla JavaScript
 
-- Webpack
-- SCSS
+- Bundle with Parcel
+- Sass
+
+## Separate state
+
+- One state-object
+- Save data to LocalStorage

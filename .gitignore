@@ -1,6 +1,5 @@
-node_modules/
-dist/
-build/
-webpack.prod1.js
-.parcel-cache/
+node_modules
+dist
+build
+.parcel-cache
 
