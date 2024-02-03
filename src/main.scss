@@ -52,27 +52,40 @@ body {
 
 .alert {
   padding: 0.4rem;
-  margin: 0 0 1rem;
-  text-align: center;
-  border-radius: 0.3em;
+  width: 96%;
+  max-width: 400px;
+  border-radius: 3px;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  position: relative;
+  position: fixed;
+  bottom: 1rem;
+  left: 0.5rem;
   font-weight: bold;
   letter-spacing: 0.08em;
+  border: 2px solid;
+  z-index: 10;
+
+  &Text {
+    padding: 0.5rem 0;
+  }
+}
+
+.alert-icon {
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 .danger {
   background-color: var(--light-red);
   color: var(--dark-red);
-  border: 1px solid var(--dark-red);
+  border-color: var(--dark-red);
 }
 
 .success {
   background-color: hsl(120, 35%, 82%);
   color: green;
-  border: 1px solid green;
+  border-color: green;
 }
 
 .title {
@@ -82,12 +95,6 @@ body {
   text-align: center;
   letter-spacing: 0.2em;
   color: var(--dark-blue);
-}
-
-.alert-icon {
-  position: relative;
-  top: 0;
-  right: 0;
 }
 
 .editingNoti {
@@ -243,4 +250,11 @@ body {
 
 .js {
   color: var(--my-yellow);
+}
+
+@media screen and (min-width: 600px) {
+  .alert {
+    bottom: 1rem;
+    left: 3rem;
+  }
 }

@@ -19,4 +19,4 @@ export const btnText = {
   add: "Add",
 };
 
-export const alertDuration = 3000;
+export const alertDuration = 5 * 1000;
