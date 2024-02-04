@@ -4,12 +4,11 @@
   "private": true,
   "description": "",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "test": "jest",
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html",
-    "start-webpack": "webpack-dev-server --config webpack.dev.js --open",
-    "build-webpack": "webpack --config webpack.prod.js"
+    "build": "parcel build src/index.html"
   },
   "jest": {
     "verbose": true
@@ -31,11 +30,13 @@
   },
   "homepage": "https://github.com/hungntgrb/todo-list-js#readme",
   "devDependencies": {
+    "@babel/core": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
     "@parcel/transformer-sass": "^2.11.0",
     "babel-jest": "^26.1.0",
     "babel-loader": "^8.1.0",
     "bootstrap": "^4.5.0",
-    "jest": "^26.1.0",
+    "jest": "^29.7.0",
     "parcel": "^2.11.0"
   }
 }
